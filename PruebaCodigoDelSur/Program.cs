@@ -1,7 +1,12 @@
+using PruebaCodigoDelSur.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Extension services
+builder.Services.ConfigureCors();
+builder.Services.ConfigureSqlContext(builder.Configuration);
+
+// Other services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
