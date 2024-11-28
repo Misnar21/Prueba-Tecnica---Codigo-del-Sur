@@ -11,5 +11,6 @@ namespace Contracts
 	{
 		IUserRepository UserRepository { get; }
 		void Save();
+		Task SaveAsync();
 	}
 }

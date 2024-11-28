@@ -4,7 +4,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Extension services
 builder.Services.ConfigureCors();
+builder.Services.ConfigureRepositoryManager();
+builder.Services.ConfigureServiceManager();
 builder.Services.ConfigureSqlContext(builder.Configuration);
+builder.Services.ConfigureControllers();
+builder.Services.AddAutoMapper(typeof(Program));
 
 // Other services
 builder.Services.AddEndpointsApiExplorer();

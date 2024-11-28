@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Shared.DTOs
 {
-	public record UserDTO(Guid Id, string UserName);
+	public record UserDTO(Guid Id, string Username, string Password);
 
-	public record UserForCreationDTO(string UserName, string Password);
+	public record UserForCreationDTO(string Username, string Password);
 }

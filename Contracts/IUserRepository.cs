@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -9,5 +10,9 @@ namespace Contracts
 {
 	public interface IUserRepository
 	{
+		Task<User?> GetUserByIdAsync(Guid userId, bool trackChanges);
+		Task<User?> GetUserByUsernameAsync(string username, bool trackChanges);
+		void CreateUser(User user);
+		Task<bool> ExistsByUsernameAsync(string username);
 	}
 }

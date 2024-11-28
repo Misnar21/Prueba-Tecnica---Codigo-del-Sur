@@ -1,5 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Contracts;
+using Microsoft.EntityFrameworkCore;
 using Repository;
+using Service;
+using Service.Contracts;
 
 namespace PruebaCodigoDelSur.Extensions
 {
@@ -20,5 +23,15 @@ namespace PruebaCodigoDelSur.Extensions
 		public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration) =>
 			services.AddDbContext<RepositoryContext>(opts =>
 				opts.UseSqlServer(configuration.GetConnectionString("sqlConnection")));
+		public static void ConfigureControllers(this IServiceCollection services) =>
+			services.AddControllers(config =>
+			{
+				config.RespectBrowserAcceptHeader = true;
+				config.ReturnHttpNotAcceptable = true;
+			});
+		public static void ConfigureRepositoryManager(this IServiceCollection services) =>
+			services.AddScoped<IRepositoryManager, RepositoryManager>();
+		public static void ConfigureServiceManager(this IServiceCollection services) =>
+			services.AddScoped<IServiceManager, ServiceManager>();
 	}
 }
