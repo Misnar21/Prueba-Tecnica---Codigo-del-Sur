@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Contracts;
 using Service.Contracts;
+using Shared.DTOs;
 
 namespace Service
 {
@@ -14,5 +15,14 @@ namespace Service
 			_mapper = mapper;
 		}
 
+		public Task<UserDTO> CreateUserAsync(UserForCreationDTO user)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<UserDTO> GetUserByUsernameAsync(string username)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
