@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace Presentation
 {
-	[Authorize]
 	[Route("api/weatherApi")]
 	public class WheatherApiController : ControllerBase
 	{
@@ -18,9 +17,10 @@ namespace Presentation
 		public WheatherApiController(IServiceManager service) => _service = service;
 
 		[HttpGet]
+		[Authorize]
 		public async Task<IActionResult> GetWeatherData([FromQuery] string city)
 		{
-			throw new NotImplementedException();
+			return Ok("Accediste al metodo!");
 		}
 	}
 }

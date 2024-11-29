@@ -18,18 +18,19 @@ namespace Presentation
 
 		public AuthController(IServiceManager service) => _service = service;
 
-		//[HttpPost("login")]
-		//public async Task<IActionResult> Login([FromBody] UserDTO userLogin)
-		//{
-		//	var token = await _service.AuthService.AuthenticateUserAsync(userLogin);
+		[HttpPost("login")]
+		public async Task<IActionResult> Authenticate([FromBody] UserForAuthenticationDto user)
+		{
+			if (user == null) return BadRequest("User cant be null");
 
-		//	if (token == null)
-		//	{
-		//		return Unauthorized("Invalid username or password.");
-		//	}
+			if (!await _service.AuthService.ValidateUser(user)) return Unauthorized();
+			
+			return Ok(new
+			{
+				Token = await _service.AuthService.CreateToken()
+			});
+		}
 
-		//	return Ok(new { Token = token });
-		//}
 
 		[HttpPost("register")]
 		public async Task<IActionResult> RegisterUser([FromBody] UserForRegistrationDto userForRegistration)

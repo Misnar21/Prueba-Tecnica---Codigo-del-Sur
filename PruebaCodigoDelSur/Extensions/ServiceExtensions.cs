@@ -6,6 +6,11 @@ using Microsoft.OpenApi.Models;
 using Repository;
 using Service;
 using Service.Contracts;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
+
 
 namespace PruebaCodigoDelSur.Extensions
 {
@@ -53,15 +58,68 @@ namespace PruebaCodigoDelSur.Extensions
 
 		public static void ConfigureSwagger(this IServiceCollection services)
 		{
-			services.AddSwaggerGen(s =>
+			services.AddSwaggerGen(options =>
 			{
-				s.SwaggerDoc("v1", new OpenApiInfo
+				options.SwaggerDoc("v1", new OpenApiInfo
 				{
-					Title = "Registrar Usuarios",
+					Title = "Endpoints",
 					Version = "v1"
+				});
+
+				options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+				{
+					In = ParameterLocation.Header,
+					Description = "Place to add JWT with Bearer",
+					Name = "Authorization",
+					Type = SecuritySchemeType.ApiKey,
+					Scheme = "Bearer"
+				});
+
+				options.AddSecurityRequirement(new OpenApiSecurityRequirement
+				{
+					{
+						new OpenApiSecurityScheme
+						{
+							Reference = new OpenApiReference
+							{
+								Type = ReferenceType.SecurityScheme,
+								Id = "Bearer"
+							},
+							Name = "Bearer",
+						},
+						new List<string>()
+					}
 				});
 			});
 		}
+
+
+		public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
+		{
+			var jwtSettings = configuration.GetSection("JwtSettings");
+			var secretKey = jwtSettings["Secret"];
+
+			services.AddAuthentication(opt =>
+			{
+				opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+				opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+			})
+			.AddJwtBearer(options =>
+			{
+				options.TokenValidationParameters = new TokenValidationParameters
+				{
+					ValidateIssuer = false,
+					ValidateAudience = false,
+					ValidateLifetime = true,
+					ValidateIssuerSigningKey = true,
+					ValidIssuer = jwtSettings["validIssuer"],
+					ValidAudience = jwtSettings["validAudience"],
+					IssuerSigningKey = new
+					SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+				};
+			});
+		}
+
 
 	}
 }
