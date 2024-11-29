@@ -1,53 +1,41 @@
+using Microsoft.AspNetCore.Mvc;
+using Presentation;
 using PruebaCodigoDelSur.Extensions;
+using Shared.DTOs;
+using Microsoft.OpenApi.Models;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Extension services
+builder.Services.AddAuthentication();
+builder.Services.ConfigureIdentity();
 builder.Services.ConfigureCors();
 builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServiceManager();
 builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.ConfigureControllers();
 builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.ConfigureSwagger();
 
 // Other services
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+app.UseRouting();
+app.UseAuthorization();
+app.UseEndpoints(endpoints =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+	endpoints.MapControllers();
+});
 
+app.UseSwagger();
+app.UseSwaggerUI(s =>
+{
+	s.SwaggerEndpoint("/swagger/v1/swagger.json", "Endpoints");
+});
+
+app.UseAuthentication();
 app.UseHttpsRedirection();
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
-
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

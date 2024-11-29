@@ -1,24 +1,18 @@
 ﻿using Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Repository.Seed;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repository
 {
-	public class RepositoryContext : DbContext
+	public class RepositoryContext : IdentityDbContext<User>
 	{
 		public RepositoryContext(DbContextOptions options) : base(options) { }
 
-		// El encargado del Seed inicial de la BD
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			modelBuilder.ApplyConfiguration(new UserSeed());
+			base.OnModelCreating(modelBuilder);
+			modelBuilder.ApplyConfiguration(new RolesSeed());
 		}
-
-		public DbSet<User> Users { get; set; }
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Contracts;
 using Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Service.Contracts;
 using Shared.DTOs;
@@ -13,25 +14,30 @@ namespace Service
 	{
 		private readonly IRepositoryManager _repository;
 		private readonly IConfiguration _configuration;
-		private readonly IServiceManager _serviceManager;
+		private readonly UserManager<User> _userManager;
 		private readonly IMapper _mapper;
 
-		public AuthService(IRepositoryManager repository, IConfiguration configuration, IServiceManager serviceManager, IMapper mapper)
+		public AuthService(IRepositoryManager repository, IConfiguration configuration, IMapper mapper, UserManager<User> userManager)
 		{
 			_repository = repository;
 			_configuration = configuration;
-			_serviceManager = serviceManager;
+			_userManager = userManager;
 			_mapper = mapper;
 		}
 
-		public Task<string> AuthenticateUserAsync(UserDTO userLogin)
+		public async Task<IdentityResult> RegisterUser(UserForRegistrationDto userForRegistration)
 		{
-			throw new NotImplementedException();
+			if (userForRegistration is null) throw new Exception("Body is null");
+
+			var user = _mapper.Map<User>(userForRegistration);
+
+			var result = await _userManager.CreateAsync(user,userForRegistration.Password);
+
+			//if (result.Succeeded)
+			//	await _userManager.AddToRolesAsync(user, userForRegistration.Roles);
+
+			return result;
 		}
 
-		public Task<UserForCreationDTO> RegisterUserAsync(UserForCreationDTO userRegistration)
-		{
-			throw new NotImplementedException();
-		}
 	}
 }

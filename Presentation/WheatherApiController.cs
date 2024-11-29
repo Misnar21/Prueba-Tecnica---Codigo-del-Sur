@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Presentation
 {
+	[Authorize]
 	[Route("api/weatherApi")]
 	public class WheatherApiController : ControllerBase
 	{
@@ -16,7 +17,6 @@ namespace Presentation
 
 		public WheatherApiController(IServiceManager service) => _service = service;
 
-		// TODO Authorization to use
 		[HttpGet]
 		public async Task<IActionResult> GetWeatherData([FromQuery] string city)
 		{

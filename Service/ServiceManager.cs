@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Contracts;
+using Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Service.Contracts;
 using System;
@@ -16,7 +18,7 @@ namespace Service
 		private readonly Lazy<IAuthService> _authService;
 		private readonly Lazy<IWeatherApiService> _weatherService;
 		private readonly Lazy<IPreferencesService> _preferencesService;
-		public ServiceManager(IRepositoryManager repositoryManager, IMapper mapper, IConfiguration configuration)
+		public ServiceManager(IRepositoryManager repositoryManager, IMapper mapper, IConfiguration configuration, UserManager<User> userManager)
 		{
 			_userService = new Lazy<IUserService>(() => new
 				UserService(repositoryManager, mapper));
@@ -25,7 +27,7 @@ namespace Service
 				WeatherApiService(mapper));
 
 			_authService = new Lazy<IAuthService>(() => new
-				AuthService(repositoryManager, configuration, this, mapper));
+				AuthService(repositoryManager, configuration, mapper, userManager));
 
 			_preferencesService = new Lazy<IPreferencesService>(() => new
 				PreferencesService(repositoryManager, mapper));

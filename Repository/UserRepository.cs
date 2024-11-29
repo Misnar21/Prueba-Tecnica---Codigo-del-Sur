@@ -17,27 +17,22 @@ namespace Repository
 
 		public async Task<bool> ExistsByUsernameAsync(string username)
 		{
-			return await FindByCondition(u => u.Username.Equals(username), false)
-						 .AnyAsync();
+			throw new NotImplementedException();
 		}
 
 		public async Task<IEnumerable<User>> GetAllUsersAsync(bool trackChanges)
 		{
-			return await FindAll(trackChanges)
-						 .OrderBy(u => u.Username)
-						 .ToListAsync();
+			throw new NotImplementedException();
 		}
 
 		public async Task<User?> GetUserByIdAsync(Guid userId, bool trackChanges)
 		{
-			return await FindByCondition(u => u.Id == userId, trackChanges)
-						 .SingleOrDefaultAsync();
+			throw new NotImplementedException();
 		}
 
 		public async Task<User?> GetUserByUsernameAsync(string username, bool trackChanges)
 		{
-			return await FindByCondition(u => u.Username.Equals(username), trackChanges)
-						 .SingleOrDefaultAsync();
+			throw new NotImplementedException();
 		}
 	}
 }
