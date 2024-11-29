@@ -1,4 +1,7 @@
-La api esta hecha con .Net 8.0
+VERSIONES
+.Net 8.0
+Microsoft.EntityFrameworkCore 9.0
+
 
 GUIA DE USO DE LA APLICACION
 
@@ -35,6 +38,3 @@ LUEGO DE EJECUTARLA
 NOTAS SIN RELACION A LAS INSTRUCCIONES
 
 Entiendo que me faltaron cosas, estuve con menos tiempo de lo que pensaba estos dos dias, pense que iba a estar mas disponible, me disculpo por eso.
-
-Deberia de andar bien siguiendo las instrucciones que deje, pero no tuve la oportunidad de probarlo yo desde otro dispositivo.
-En caso de que no llegase a ejecutar o algo del estilo, espero tener la oportunidad de defender lo que hice de manera local.
