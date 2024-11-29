@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
 using Shared.DTOs;
 using System;
@@ -18,16 +19,36 @@ namespace Presentation
 		public AuthController(IServiceManager service) => _service = service;
 
 		[HttpPost("login")]
-		public async Task<IActionResult> Login([FromBody] UserDTO userLogin)
+		public async Task<IActionResult> Authenticate([FromBody] UserForAuthenticationDto user)
 		{
-			var token = await _service.AuthService.AuthenticateUserAsync(userLogin);
+			if (user == null) return BadRequest("User cant be null");
 
-			if (token == null)
+			if (!await _service.AuthService.ValidateUser(user)) return Unauthorized();
+			
+			return Ok(new
 			{
-				return Unauthorized("Invalid username or password.");
-			}
-
-			return Ok(new { Token = token });
+				Token = await _service.AuthService.CreateToken()
+			});
 		}
+
+
+		[HttpPost("register")]
+		public async Task<IActionResult> RegisterUser([FromBody] UserForRegistrationDto userForRegistration)
+		{
+			IdentityResult result = await _service.AuthService.RegisterUser(userForRegistration);
+
+			if (result is null) return BadRequest("Result is null");
+
+			if (!result.Succeeded)
+			{	
+				foreach (var error in result.Errors)
+				{
+					ModelState.TryAddModelError(error.Code, error.Description);
+				}
+				return BadRequest(ModelState);
+			}
+			return Ok("User was registred correctly!");
+		}
+
 	}
 }

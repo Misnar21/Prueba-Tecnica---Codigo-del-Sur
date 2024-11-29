@@ -1,10 +1,13 @@
-﻿using Shared.DTOs;
+﻿using Microsoft.AspNetCore.Identity;
+using Shared.DTOs;
 
 namespace Service.Contracts
 {
 	public interface IAuthService
 	{
-		Task<UserForCreationDTO> RegisterUserAsync(UserForCreationDTO userRegistration);
-		Task<string> AuthenticateUserAsync(UserDTO userLogin);
+		Task<IdentityResult> RegisterUser(UserForRegistrationDto userForRegistration);
+		Task<bool> ValidateUser(UserForAuthenticationDto userForAuth);
+		Task<string> CreateToken();
+
 	}
 }

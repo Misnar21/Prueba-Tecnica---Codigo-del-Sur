@@ -17,6 +17,9 @@ namespace PruebaCodigoDelSur
 			CreateMap<UserForCreationDTO, User>();
 
 			CreateMap<UserDTO, User>();
+
+			CreateMap<UserForRegistrationDto, User>();
+
 		}
 	}
 }
